@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+head
+	meta(charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1")
+	title Signature Prototype
+	link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.1/css/bulma.css")
+
+
+	script(defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js")
+
+body
+	noscript Your browser does not support JavaScript!
+	
+	section.section
+		div.container
+			h1.title Sistema de nóminas mirador 600
+			p.subtitle Porfavor ingrese su firma
+			article.media
+				div.media-content
+					label.checkbox
+						p Entiendo y he leido las politicas de privacidad de datos personales 
+							input(type="checkbox")
+						p#user 
+						
+					div.field
+						canvas(id="canvas" style="background: #f0f0f0") Not supported in current browser, please install firefox or google chrome
+
+			div.buttons
+				button(class="button" id="clear") Limpiar
+				button(class="button is-info" id="submit") Enviar
+				 
+				
+	script(type="module" src="/index.js")
+
+	script(type="text/javascript" src="libs/axios/axios.js")
+
