@@ -9,12 +9,37 @@ const bodyParser = require("body-parser");
 
 const apiRouter = require("./api.js");
 
+const allowedDomains = ["http://localhost:3000"];
+
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 app.set("view engine", "pug");
 app.set("views", "./views");
 
+
+app.use("/api",apiRouter);
+
+app.use((req, res, next) => {
+
+  res.header('Access-Control-Allow-Origin', '*');
+
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+
+    app.options('*', (req, res) => {
+        // allowed XHR methods  
+        res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+        res.send();
+    });
+
+  console.log("allowing cors to ");
+  next();
+});
 
 app.use(function(err, req, res, next) {
   console.error("Error handled");
@@ -32,7 +57,6 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.use("/api",apiRouter);
 
 app.get("*", function(req, res) {
   res.render("404");

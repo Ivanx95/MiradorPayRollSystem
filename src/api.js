@@ -1,18 +1,40 @@
 const express = require("express");
 const apiRouter = express.Router();
 const PDFDocument = require("pdfkit");
+const sequelize = require("./DB/database");
+
+var cors = require('cors')
 
 var signature;
 var idSign= new Map();
+
+
+apiRouter.use(cors());
+
+apiRouter.route("/users").get(function(req, res) {
+
+  sequelize.models.User.findAll()
+    .then((users)=>{
+      console.log(users);
+        res.status(200).send(users);
+    })
+  
+});
 
 apiRouter.route("/calculation/:idUser").get(function(req, res) {
   //look on server
 
   let idUser = req.params.idUser;
   
-  var irving = {id:idUser, quantity:400, dayLabored: 2, name:"Irving Soto"};
+    sequelize.models.User.findAll({where: {id:1}})
+    .then((user)=>{
+        user.quantity=400;
+        user.dayLabored=2;
+        res.status(200).send(user);
+    })
+      
   
-  res.status(200).send(irving);
+ 
 });
 
 
@@ -36,25 +58,31 @@ apiRouter.get("/pdf/:idUser", (req, res) => {
   res.setHeader("Content-disposition", "inline");
   res.setHeader("Content-type", "application/pdf");
 
-  const content = `   FGG 5 Year 
-      Mr ${req.params.idUser}
+   sequelize.models.User.findAll({
+            where: {id:1},
+            attributes: ['name']
+            })
+    .then((user)=>{
+       
 
-      With Sign:
+     const content = `  CD.  ${user.name} With Sign: `;
 
-  `;
+      doc.y = 300;
 
-  doc.y = 300;
+      doc.text(content, 50, 50);
+      let data=idSign.get(req.params.idUser).split(',')[1] ||"" ;
+      var buffer = new Buffer(data, "base64");
+      doc.image(buffer, 80, 80, {height: 75});
 
-  doc.text(content, 50, 50);
-  let data=idSign.get(req.params.idUser).split(',')[1] ||"" ;
-  var buffer = new Buffer(data, "base64");
-  doc.image(buffer, 80, 80, {height: 75});
+      doc.pipe(res);
 
-  doc.pipe(res);
+      doc.end();
 
-  doc.end();
+      return;
+    })
 
-  return;
+
+  
 });
 
 
