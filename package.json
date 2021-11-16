@@ -12,7 +12,7 @@
     "url": "git+https://github.com/Ivanx95/MiradorPayRollSystem.git"
   },
   "dependencies": {
-    "aws-sdk": "2.605.0",
+    "aws-sdk": "2.814.0",
     "axios": "^0.19.2",
     "chai": "4.2.0",
     "connect-mongo": "3.2.0",
